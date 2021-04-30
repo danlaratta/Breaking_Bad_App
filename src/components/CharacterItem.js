@@ -1,5 +1,6 @@
 import React from 'react'
 
+// sets up the cards with the data collected from the API Request
 const CharacterItem = ({ item }) => {
     return (
         <div className='card'>

@@ -2,6 +2,7 @@ import './App.css';
 import React, { useState, useEffect } from 'react'
 import Header from './components/Header'
 import CharacterGrid from './components/CharacterGrid'
+import Search from './components/Search'
 import axios from 'axios'
 
 const App = () =>{
@@ -10,13 +11,15 @@ const App = () =>{
   const [items, setItems] = useState([])
   // determines if API is loading or if the request is complete, set to isLoading for default
   const [isLoading, setIsLoading] = useState(true)
+  // what it is being searched in the search bar
+  const [query, setQuery] = useState('')
 
   // api request 
   useEffect(() => {
     // use asyn await since axios returns a promise
     const fetchItems = async () =>{
-      // what is returned from axios and base url
-      const result = await axios(`https://www.breakingbadapi.com/api/characters`)
+      // what is returned from axios, more specifically the value for the current state of query
+      const result = await axios(`https://www.breakingbadapi.com/api/characters?name=${query}`)
 
       console.log(result.data)
       
@@ -29,11 +32,14 @@ const App = () =>{
     // call fetchItems
     fetchItems()
 
-  }, [])
+    // whenever value of query gets changed, the useEffect will fire again
+  }, [query])
 
   return(
     <div className='container'>
       <Header />
+      {/* prop is a function (getQuery) which sets the state query value to q and passes this function to the Search component */}
+      <Search getQuery={(q) => setQuery(q)} />
       <CharacterGrid isLoading={isLoading} items={items}/>
     </div>
   )
